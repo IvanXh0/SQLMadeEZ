@@ -1,4 +1,5 @@
 import "dotenv/config";
+import "reflect-metadata";
 import express from "express";
 import { globalRouter } from "./const/globalRouter.const";
 import { AppDataSource } from "./const/dataSource";
