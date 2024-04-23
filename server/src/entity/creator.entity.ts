@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { User } from "./user.entity";
 
 @Entity()
 export class Creator {
@@ -10,4 +11,7 @@ export class Creator {
 
   @Column({ nullable: true })
   generated_code: string;
+
+  @ManyToOne(() => User, (user) => user.creators, { nullable: true })
+  user?: User;
 }

@@ -13,8 +13,9 @@ export class CreatorController {
   }
 
   static async executeQuery(req: Request, res: Response) {
+    const shouldSave = req.query.shouldSaveQuery !== undefined;
     try {
-      const result = await CreatorService.executeQuery(req.body);
+      const result = await CreatorService.executeQuery(req.body, shouldSave);
 
       res.status(200).send(result);
     } catch (error) {
