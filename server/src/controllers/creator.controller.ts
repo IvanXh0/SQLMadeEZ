@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { CreatorService } from "../services/creator.service";
+import { Request, Response } from 'express';
+import { CreatorService } from '../services/creator.service';
 
 export class CreatorController {
   static async getAll(_, res: Response) {
@@ -17,7 +17,7 @@ export class CreatorController {
     try {
       const result = await CreatorService.executeQuery(req.body, shouldSave);
 
-      res.status(200).send(result);
+      res.status(200).json({ msg: 'Query executed successfully', result });
     } catch (error) {
       res.status(500).send(error);
     }

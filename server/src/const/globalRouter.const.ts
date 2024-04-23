@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { creatorRouter } from "../routes/creator.route";
+import { Router } from 'express';
+import { creatorRouter } from '../routes/creator.route';
 
 export const globalRouter = Router();
 
-globalRouter.use("/creator", creatorRouter);
+globalRouter.use('/creator', creatorRouter);

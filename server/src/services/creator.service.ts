@@ -1,29 +1,26 @@
-import { AppDataSource } from "../const/dataSource";
-import { Creator } from "../entity/creator.entity";
-import { User } from "../entity/user.entity";
-import { CreateCreator } from "../interfaces/creator.interface";
+import { AppDataSource } from '../const/dataSource';
+import { Creator } from '../entity/creator.entity';
+import { User } from '../entity/user.entity';
+import { CreateCreatorDto } from '../dtos/creator.dto';
 
 export class CreatorService {
   private static creatorRepo = AppDataSource.getRepository(Creator);
   private static userRepo = AppDataSource.getRepository(User);
 
   static async getAll(): Promise<Creator[]> {
-    const creators = await this.creatorRepo.find();
-    return creators;
+    return await this.creatorRepo.find();
   }
 
   private static async saveQuery(
-    creatorObject: CreateCreator,
+    creatorObject: CreateCreatorDto,
   ): Promise<Creator> {
     const { sql, name, email } = creatorObject;
 
-    const user = await this.userRepo.findOneBy({
-      email,
-    });
+    const user = await this.userRepo.findOneBy({ email });
 
     if (!user) {
       const newUser = this.userRepo.create({
-        name: "temp",
+        name: 'temp',
         email,
       });
 
@@ -51,7 +48,7 @@ export class CreatorService {
   }
 
   static async executeQuery(
-    creator: CreateCreator,
+    creator: CreateCreatorDto,
     shouldSaveQuery: boolean,
   ): Promise<void> {
     const { sql, name, email } = creator;
@@ -59,14 +56,12 @@ export class CreatorService {
     await queryRunner.connect();
 
     try {
-      const result = await queryRunner.query(sql);
-      return result;
+      shouldSaveQuery && (await this.saveQuery({ sql, name, email }));
+      return await queryRunner.query(sql);
     } catch (error) {
       throw new Error(error);
     } finally {
       await queryRunner.release();
-
-      shouldSaveQuery && (await this.saveQuery({ sql, name, email }));
     }
   }
 }

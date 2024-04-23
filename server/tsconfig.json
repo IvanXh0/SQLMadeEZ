@@ -17,6 +17,6 @@
     "noUnusedParameters": true,
     "sourceMap": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "eslint.config.mjs", "prettier.config.js"],
   "exclude": ["node_modules"]
 }
