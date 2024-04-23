@@ -8,7 +8,7 @@ export class CreatorController {
 
       res.status(200).send(creators);
     } catch (error) {
-      res.status(500).send(error);
+      res.status(500).json({ msg: error.message });
     }
   }
 
@@ -19,7 +19,9 @@ export class CreatorController {
 
       res.status(200).json({ msg: 'Query executed successfully', result });
     } catch (error) {
-      res.status(500).json({ msg: 'Error executing query', error });
+      res
+        .status(500)
+        .json({ msg: 'Error executing query', error: error.message });
     }
   }
 }

@@ -7,17 +7,20 @@ export class UserController {
       const users = await UserService.getAll();
       res.status(200).send(users);
     } catch (error) {
-      res.status(500).send(error);
+      res.status(500).json({ msg: error.message });
     }
   }
 
   static async getAllQueriesByUser(req: Request, res: Response) {
     const { email } = req.params;
     try {
-      const users = await UserService.getAllQueriesByUser(email);
-      res.status(200).send(users);
+      const queriesByUser = await UserService.getAllQueriesByUser(email);
+
+      if (!queriesByUser.length) throw new Error('No queries found');
+
+      res.status(200).send(queriesByUser);
     } catch (error) {
-      res.status(500).send(error);
+      res.status(500).json({ msg: error.message });
     }
   }
 
@@ -26,7 +29,7 @@ export class UserController {
       const user = await UserService.saveUser(req.body);
       res.status(200).send(user);
     } catch (error) {
-      res.status(500).send(error);
+      res.status(500).json({ msg: error.message });
     }
   }
 }

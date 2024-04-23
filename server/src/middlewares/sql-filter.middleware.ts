@@ -22,11 +22,10 @@ export const sqlFilterMiddleware = (
     sql.includes(keyword),
   );
 
-  if (containsDisallowed) {
+  if (containsDisallowed)
     return res.status(403).json({
       msg: 'Your query contains disallowed keywords and has been blocked.',
     });
-  }
 
   next();
 };

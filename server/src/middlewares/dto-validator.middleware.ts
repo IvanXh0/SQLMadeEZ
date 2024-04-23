@@ -8,12 +8,11 @@ export const validateDto =
     const dtoObj = plainToInstance(type, req.body);
     const errors = await validate(dtoObj as object, { skipMissingProperties });
 
-    if (errors.length > 0) {
+    if (errors.length > 0)
       return res.status(400).json({
         message: 'Validation errors',
         errors: formatErrors(errors),
       });
-    }
 
     next();
   };
