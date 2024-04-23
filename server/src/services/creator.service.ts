@@ -1,14 +1,16 @@
 import { AppDataSource } from '../const/dataSource';
 import { Creator } from '../entity/creator.entity';
 import { User } from '../entity/user.entity';
-import { CreateCreatorDto } from '../dtos/creator.dto';
+import { CreateCreatorDto } from '../dtos/create-creator.dto';
 
 export class CreatorService {
   private static creatorRepo = AppDataSource.getRepository(Creator);
   private static userRepo = AppDataSource.getRepository(User);
 
   static async getAll(): Promise<Creator[]> {
-    return await this.creatorRepo.find();
+    return await this.creatorRepo.find({
+      relations: { user: true },
+    });
   }
 
   private static async saveQuery(
