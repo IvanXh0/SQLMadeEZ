@@ -2,10 +2,8 @@ import { AppDataSource } from '../const/dataSource';
 import { Creator } from '../entity/creator.entity';
 import { User } from '../entity/user.entity';
 import { CreateCreatorDto } from '../dtos/create-creator.dto';
-import { Parser } from 'node-sql-parser';
 import { QueryRunner, Table } from 'typeorm';
-
-export const parser = new Parser();
+import { isASTArray, parseSql } from '../utils/parseSql';
 
 export class CreatorService {
   private static creatorRepo = AppDataSource.getRepository(Creator);
@@ -57,16 +55,17 @@ export class CreatorService {
     queryRunner: QueryRunner,
     sql: string,
   ): Promise<void> {
-    let parsed;
-    try {
-      parsed = parser.astify(sql);
-    } catch (error) {
-      throw new Error('Failed to parse SQL query.');
-    }
+    const parsed = parseSql(sql);
 
-    if (parsed.type !== 'insert' || !parsed.table || !parsed.columns) {
+    if (
+      isASTArray(parsed) ||
+      parsed.type !== 'insert' ||
+      !parsed.table ||
+      !parsed.columns
+    ) {
       throw new Error('Invalid SQL query for dynamic table creation.');
     }
+
     const tableName = parsed.table[0].table;
     if (typeof tableName !== 'string') {
       throw new Error('Table name must be a string.');
