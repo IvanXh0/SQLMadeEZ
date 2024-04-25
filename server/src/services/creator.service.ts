@@ -1,9 +1,16 @@
-import { AppDataSource } from '../const/dataSource';
+import { AppDataSource, dynamicDataSource } from '../const/dataSource';
 import { Creator } from '../entity/creator.entity';
 import { User } from '../entity/user.entity';
 import { CreateCreatorDto } from '../dtos/create-creator.dto';
 import { modifySqlForReturning } from '../utils/modifySqlForReturning';
 import { ensureTableExists } from '../utils/ensureTableExists';
+
+const sqlCommandHandlers: Record<string, (sql: string) => string> = {
+  insert: sql => modifySqlForReturning(sql, 'insert'),
+  update: sql => modifySqlForReturning(sql, 'update'),
+  delete: sql => modifySqlForReturning(sql, 'delete'),
+  select: sql => sql,
+};
 
 export class CreatorService {
   private static creatorRepo = AppDataSource.getRepository(Creator);
@@ -56,7 +63,16 @@ export class CreatorService {
     shouldSaveQuery: boolean,
   ) {
     const { sql, name, email } = creator;
-    const queryRunner = AppDataSource.createQueryRunner();
+    const user = await this.userRepo.findOneBy({ email });
+
+    if (!user) throw new Error('User not found.');
+
+    const newDb = await dynamicDataSource(user.id);
+    await newDb.initialize().catch(e => {
+      throw new Error('Failed to initialize the database: ' + e.message);
+    });
+
+    const queryRunner = newDb.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction();
 
@@ -65,8 +81,13 @@ export class CreatorService {
         await this.saveQuery({ sql, name, email });
       }
 
-      await ensureTableExists(queryRunner, sql);
-      const finalSql = modifySqlForReturning(sql, 'insert');
+      const commandType = sql.trim().split(' ')[0].toLowerCase();
+      const processSql = sqlCommandHandlers[commandType] ?? (sql => sql);
+      const finalSql = processSql(sql);
+
+      if (commandType === 'insert') {
+        await ensureTableExists(queryRunner, sql);
+      }
 
       const result = await queryRunner.query(finalSql);
       await queryRunner.commitTransaction();

@@ -13,3 +13,12 @@ export const AppDataSource = new DataSource({
   logging: false,
   entities: ['src/entity/**/*.ts'],
 });
+
+export const dynamicDataSource = async (userId: string) => {
+  return new DataSource({
+    type: 'better-sqlite3',
+    database: `./db/${userId}.db`,
+    synchronize: true,
+    logging: true,
+  });
+};
