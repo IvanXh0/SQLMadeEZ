@@ -16,7 +16,7 @@ export const RenderTable = () => {
       axios.post("http://localhost:3000/api/creator/execute-query", {
         sql,
         name: "temp",
-        email: "temp@gmail.com",
+        email: "ivan.apostolovski@gmail.com",
       }),
   });
 
