@@ -1,5 +1,7 @@
 export const modifySqlForReturning = (sql: string, type: string): string => {
-  if (type === 'insert' && !sql.toLowerCase().includes('returning')) {
+  const shouldModify = ['insert', 'update', 'delete'].includes(type);
+
+  if (shouldModify && !sql.toLowerCase().includes('returning')) {
     return `${sql.trim()} RETURNING *`;
   }
   return sql;

@@ -77,17 +77,13 @@ export class CreatorService {
     await queryRunner.startTransaction();
 
     try {
-      if (shouldSaveQuery) {
-        await this.saveQuery({ sql, name, email });
-      }
+      if (shouldSaveQuery) await this.saveQuery({ sql, name, email });
 
       const commandType = sql.trim().split(' ')[0].toLowerCase();
       const processSql = sqlCommandHandlers[commandType] ?? (sql => sql);
       const finalSql = processSql(sql);
 
-      if (commandType === 'insert') {
-        await ensureTableExists(queryRunner, sql);
-      }
+      if (commandType === 'insert') await ensureTableExists(queryRunner, sql);
 
       const result = await queryRunner.query(finalSql);
       await queryRunner.commitTransaction();
