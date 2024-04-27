@@ -1,8 +1,18 @@
 "use client";
-import { APIResponse, QueryResult } from "@/utils/types";
+import { APIResponse, QueryError, QueryResult } from "@/utils/types";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useState } from "react";
+import { Button } from "./ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "./ui/table";
+import { Textarea } from "./ui/textarea";
 
 export const RenderTable = () => {
   const [sqlQuery, setSqlQuery] = useState("");
@@ -11,7 +21,7 @@ export const RenderTable = () => {
     data: queryResult,
     error,
     mutate: handleQuerySubmit,
-  } = useMutation<APIResponse<QueryResult>, Error, string>({
+  } = useMutation<APIResponse<QueryResult>, QueryError, string>({
     mutationFn: (sql: string) =>
       axios.post("http://localhost:3000/api/creator/execute-query", {
         sql,
@@ -26,40 +36,35 @@ export const RenderTable = () => {
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-24 bg-white">
-      <textarea
+      <Textarea
         value={sqlQuery}
         onChange={(e) => setSqlQuery(e.target.value)}
         rows={10}
         cols={50}
         placeholder="Enter SQL query here..."
         className="mb-4 text-black"
-      ></textarea>
-      <button
-        onClick={submitQuery}
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        Execute Query
-      </button>
-      {error && <p className="text-red-500">{error.message}</p>}
+      />
+      <Button onClick={submitQuery}>Execute Query</Button>
+      {error && <p className="text-red-500">{error.response?.data.error}</p>}
       {queryResult && queryResult.data && queryResult.data.result && (
-        <table className="mt-4 text-black" border={2}>
-          <thead>
-            <tr>
+        <Table>
+          <TableHeader>
+            <TableRow>
               {Object.keys(queryResult.data.result[0]).map((key) => (
-                <th key={key}>{key}</th>
+                <TableHead key={key}>{key}</TableHead>
               ))}
-            </tr>
-          </thead>
-          <tbody>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
             {queryResult.data.result.map((row, index) => (
-              <tr key={index}>
-                {Object.values(row).map((val, idx) => (
-                  <td key={idx}>{val}</td>
+              <TableRow key={index}>
+                {Object.values(row).map((value) => (
+                  <TableCell key={value}>{value}</TableCell>
                 ))}
-              </tr>
+              </TableRow>
             ))}
-          </tbody>
-        </table>
+          </TableBody>
+        </Table>
       )}
     </main>
   );

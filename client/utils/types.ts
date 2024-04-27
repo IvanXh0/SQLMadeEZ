@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 export interface QueryResult {
   result: Creator[];
 }
@@ -10,6 +12,18 @@ export interface APIResponse<T> {
 
 export interface QueryResult {
   result: Creator[];
+}
+
+export interface APIErrorResponse {
+  error: string;
+}
+
+export interface QueryError {
+  response?: {
+    data: APIErrorResponse;
+    status: number;
+    statusText: string;
+  };
 }
 
 export interface Creator {
