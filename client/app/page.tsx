@@ -1,4 +1,3 @@
-"use client";
 import { RenderTable } from "@/components/render-table";
 
 export default function Home() {

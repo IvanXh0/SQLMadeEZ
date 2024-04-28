@@ -13,9 +13,11 @@ import {
   TableRow,
 } from "./ui/table";
 import { Textarea } from "./ui/textarea";
+import { useUser } from "@clerk/nextjs";
 
 export const RenderTable = () => {
-  const [sqlQuery, setSqlQuery] = useState("");
+  const [sqlQuery, setSqlQuery] = useState<string>("");
+  const { user } = useUser();
 
   const {
     data: queryResult,
@@ -26,7 +28,7 @@ export const RenderTable = () => {
       axios.post("http://localhost:3000/api/creator/execute-query", {
         sql,
         name: "temp",
-        email: "ivan.apostolovski@gmail.com",
+        email: user?.emailAddresses[0].emailAddress,
       }),
   });
 
