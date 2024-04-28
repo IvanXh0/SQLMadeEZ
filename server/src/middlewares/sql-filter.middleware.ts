@@ -9,13 +9,11 @@ export const sqlFilterMiddleware = (
 
   const disallowedKeywords = [
     'drop',
-    'delete',
     'truncate',
     'exec',
     'execute',
     'grant',
     'revoke',
-    'alter',
   ];
 
   const containsDisallowed = disallowedKeywords.some(keyword =>
@@ -24,7 +22,7 @@ export const sqlFilterMiddleware = (
 
   if (containsDisallowed)
     return res.status(403).json({
-      msg: 'Your query contains disallowed keywords and has been blocked.',
+      error: 'Your query contains disallowed keywords and has been blocked.',
     });
 
   next();

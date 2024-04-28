@@ -12,11 +12,12 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
-import { Textarea } from "./ui/textarea";
 import { useUser } from "@clerk/nextjs";
+import Editor from "@monaco-editor/react";
+import { useEditorSetup } from "@/hooks/useEditorSetup";
 
 export const RenderTable = () => {
-  const [sqlQuery, setSqlQuery] = useState<string>("");
+  const [sqlQuery, setSqlQuery] = useState<string | undefined>("");
   const { user } = useUser();
 
   const {
@@ -33,18 +34,20 @@ export const RenderTable = () => {
   });
 
   const submitQuery = () => {
-    handleQuerySubmit(sqlQuery);
+    sqlQuery && handleQuerySubmit(sqlQuery);
   };
+
+  const { handleEditorDidMount } = useEditorSetup({ setSqlQuery });
 
   return (
     <main className="flex flex-col items-center justify-center min-h-screen p-24 bg-white">
-      <Textarea
+      <Editor
+        height="50vh"
+        width="50vw"
+        defaultLanguage="sql1"
+        theme="myCustomTheme"
         value={sqlQuery}
-        onChange={(e) => setSqlQuery(e.target.value)}
-        rows={10}
-        cols={50}
-        placeholder="Enter SQL query here..."
-        className="mb-4 text-black"
+        onMount={handleEditorDidMount}
       />
       <Button onClick={submitQuery}>Execute Query</Button>
       {error && <p className="text-red-500">{error.response?.data.error}</p>}
