@@ -27,6 +27,21 @@ export class CreatorService {
   ): Promise<Creator> {
     const { sql, name, email } = creatorObject;
 
+    const allQueries = await this.creatorRepo.find({});
+
+    if (allQueries.length > 0) {
+      const nameExists =
+        name !== 'unnamed' && allQueries.some(({ name }) => name === name);
+
+      if (nameExists) throw new Error('Query name already exists.');
+
+      const codeExists = allQueries.some(
+        ({ generated_code }) => generated_code === sql,
+      );
+
+      if (codeExists) throw new Error('Query code already saved.');
+    }
+
     const user = await this.userRepo.findOneBy({ email });
 
     if (!user) {

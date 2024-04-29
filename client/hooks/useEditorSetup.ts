@@ -2,10 +2,9 @@ import { useCallback, useRef } from "react";
 import { languageSetup } from "@/utils/languageSetup";
 import * as monacoEditor from "monaco-editor";
 
-interface P {
-  setSqlQuery: (sql: string) => void;
-}
-export const useEditorSetup = ({ setSqlQuery }: P) => {
+const isLanguageRegistered = { value: false };
+
+export const useEditorSetup = () => {
   const editorRef = useRef<monacoEditor.editor.IStandaloneCodeEditor | null>(
     null,
   );
@@ -16,13 +15,8 @@ export const useEditorSetup = ({ setSqlQuery }: P) => {
       monaco: typeof monacoEditor,
     ) => {
       editorRef.current = editor;
-      // @ts-expect-error FIXME: it aint workin correctly
-      editor.getModel().onDidChangeContent(() => {
-        const currentContent = editor.getValue();
-        setSqlQuery(currentContent);
-      });
 
-      if (monaco) {
+      if (!isLanguageRegistered.value && monaco) {
         monaco.languages.register({ id: "sql1" });
         monaco.languages.setMonarchTokensProvider("sql1", languageSetup);
         monaco.editor.defineTheme("customTheme", {
@@ -64,12 +58,14 @@ export const useEditorSetup = ({ setSqlQuery }: P) => {
           triggerCharacters: [" ", ".", ",", "(", "'"],
         });
 
+        isLanguageRegistered.value = true;
+
         editor.updateOptions({
           theme: "customTheme",
         });
       }
     },
-    [setSqlQuery],
+    [],
   );
 
   return {

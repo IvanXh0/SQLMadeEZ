@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
-import clsx from "clsx";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Navbar } from "@/components/navbar";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +21,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
-        <body className={clsx(inter.className, "bg-white")}>
+        <body className={cn(inter.className, "bg-white")}>
           <Navbar />
           <Providers>{children}</Providers>
         </body>

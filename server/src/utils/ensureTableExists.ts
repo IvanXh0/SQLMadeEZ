@@ -15,6 +15,7 @@ export const ensureTableExists = async (
     throw new Error('Invalid SQL query for dynamic table creation.');
   }
 
+  console.log(parsed);
   const tableName = parsed.table[0].table;
   const tableExists = await queryRunner.hasTable(tableName);
   if (!tableExists) {

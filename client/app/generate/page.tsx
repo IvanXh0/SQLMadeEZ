@@ -1,5 +1,5 @@
-import { RenderTable } from "@/components/render-table";
+import { ExecuteQuery } from "@/components/execute-query";
 
 export default function Generate() {
-  return <RenderTable />;
+  return <ExecuteQuery />;
 }
