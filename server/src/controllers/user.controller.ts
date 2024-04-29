@@ -32,4 +32,16 @@ export class UserController {
       res.status(500).json({ msg: error.message });
     }
   }
+
+  static async deleteUser(req: Request, res: Response) {
+    try {
+      console.log(req.params);
+      const { userId } = req.params;
+
+      await UserService.deleteUser(userId);
+      res.status(204).send();
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  }
 }

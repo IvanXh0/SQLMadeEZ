@@ -1,5 +1,5 @@
 "use client";
-import { APIResponse, QueryError, QueryResult } from "@/utils/types";
+import type { APIResponse, QueryError, QueryResult } from "@/utils/types";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { Button } from "./ui/button";
@@ -61,12 +61,12 @@ export const ExecuteQuery = () => {
           setSubmitting(false);
         }}
       >
-        {({ values, setFieldValue, isSubmitting, errors }) => (
-          <Form className="w-full">
-            <div className="flex flex-row max-w-4xl justify-between items-center gap-1.5">
+        {({ handleSubmit, values, setFieldValue, isSubmitting, errors }) => (
+          <Form className="w-full flex justify-center flex-col mx-auto items-center">
+            <div className="flex flex-row max-w-4xl justify-around gap-1.5">
               <Input
                 placeholder="Name your query"
-                className="w-1/3 mb-4 flex"
+                className="w-1/2 mb-4 flex"
                 name="queryName"
                 id="queryName"
                 type="text"
@@ -93,10 +93,19 @@ export const ExecuteQuery = () => {
               <Editor
                 height="40vh"
                 defaultLanguage="sql1"
-                theme="myCustomTheme"
+                theme="customTheme"
                 value={values.sqlQuery}
-                onMount={handleEditorDidMount}
+                onMount={(editor, monaco) => {
+                  handleEditorDidMount(editor, monaco);
+                  editor.addCommand(
+                    monaco.KeyMod.Shift | monaco.KeyCode.Enter,
+                    () => handleSubmit(),
+                  );
+                }}
                 onChange={(value) => setFieldValue("sqlQuery", value)}
+                options={{
+                  minimap: { enabled: false },
+                }}
               />
               <Button type="submit" disabled={isSubmitting}>
                 Execute Query

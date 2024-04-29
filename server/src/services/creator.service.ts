@@ -30,16 +30,21 @@ export class CreatorService {
     const allQueries = await this.creatorRepo.find({});
 
     if (allQueries.length > 0) {
-      const nameExists =
-        name !== 'unnamed' && allQueries.some(({ name }) => name === name);
+      const nameExists = allQueries.some(
+        ({ name: queryName }) => queryName === name,
+      );
 
-      if (nameExists) throw new Error('Query name already exists.');
+      if (nameExists && name !== 'unnamed')
+        throw new Error('Query name already exists.');
 
-      const codeExists = allQueries.some(
+      const codeExists = allQueries.find(
         ({ generated_code }) => generated_code === sql,
       );
 
-      if (codeExists) throw new Error('Query code already saved.');
+      if (codeExists)
+        throw new Error(
+          `Query code already saved under name ${codeExists.name}`,
+        );
     }
 
     const user = await this.userRepo.findOneBy({ email });
@@ -82,7 +87,7 @@ export class CreatorService {
 
     if (!user) throw new Error('User not found.');
 
-    const newDb = await dynamicDataSource(user.id);
+    const newDb = await dynamicDataSource(user.userId);
     await newDb.initialize().catch(e => {
       throw new Error('Failed to initialize the database: ' + e.message);
     });

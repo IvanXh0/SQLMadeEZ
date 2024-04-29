@@ -1,3 +1,4 @@
+import { DeleteResult } from 'typeorm';
 import { AppDataSource } from '../const/dataSource';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { User } from '../entity/user.entity';
@@ -24,5 +25,9 @@ export class UserService {
 
   static async getUserByEmail(email: string): Promise<User> {
     return await this.userRepo.findOneBy({ email });
+  }
+
+  static async deleteUser(userId: string): Promise<DeleteResult> {
+    return await this.userRepo.delete({ userId });
   }
 }

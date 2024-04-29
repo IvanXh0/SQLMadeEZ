@@ -24,7 +24,7 @@ export const useEditorSetup = () => {
           inherit: false,
           rules: [
             { token: "keyword.sql", foreground: "007ACC", fontStyle: "bold" },
-            { token: "operator.sql", foreground: "C586C0" },
+            { token: "operator.sql", foreground: "C586C0", fontStyle: "bold" },
             { token: "builtinFunctions.sql", foreground: "4EC9B0" },
           ],
           colors: {

@@ -10,3 +10,5 @@ userRouter.get('/', UserController.getAll);
 userRouter.get('/:email', UserController.getAllQueriesByUser);
 
 userRouter.post('/', validateDto(CreateUserDto), UserController.saveUser);
+
+userRouter.delete('/:userId', UserController.deleteUser);

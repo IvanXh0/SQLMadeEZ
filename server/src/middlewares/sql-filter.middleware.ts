@@ -7,14 +7,7 @@ export const sqlFilterMiddleware = (
 ) => {
   const sql = req.body.sql.toLowerCase();
 
-  const disallowedKeywords = [
-    'drop',
-    'truncate',
-    'exec',
-    'execute',
-    'grant',
-    'revoke',
-  ];
+  const disallowedKeywords = ['truncate', 'exec', 'execute', 'grant', 'revoke'];
 
   const containsDisallowed = disallowedKeywords.some(keyword =>
     sql.includes(keyword),
