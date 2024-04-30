@@ -70,7 +70,7 @@ export async function POST(req: Request) {
     case "user.deleted": {
       const res = await axios.delete(`http://localhost:3000/api/user/${id}`);
 
-      if (res.status === 204) console.log("Success broooo");
+      if (res.status === 204) console.log("User deleted");
 
       break;
     }

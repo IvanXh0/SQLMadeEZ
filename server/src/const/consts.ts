@@ -1,3 +1,3 @@
 import path from 'path';
 
-export const dbPath = path.join(__dirname, '..', '..', 'db');
+export const DB_PATH = path.join(__dirname, '..', '..', 'db');

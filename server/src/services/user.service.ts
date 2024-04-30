@@ -2,7 +2,8 @@ import { AppDataSource } from '../const/dataSource';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { User } from '../entity/user.entity';
 import { unlink } from 'node:fs/promises';
-import { dbPath } from '../const/consts';
+import { DB_PATH } from '../const/consts';
+import { fileExists } from '../utils/fileExists';
 
 export class UserService {
   private static userRepo = AppDataSource.getRepository(User);
@@ -30,13 +31,14 @@ export class UserService {
 
   static async deleteUser(userId: string): Promise<void> {
     const deleteResult = await this.userRepo.delete({ userId });
+    const filePath = `${DB_PATH}/${userId}.db`;
+    const fileToDelete = await fileExists(filePath);
 
-    if (deleteResult.affected !== 0) {
+    if (deleteResult.affected !== 0 && fileToDelete) {
       try {
-        await unlink(`${dbPath}/${userId}.db`);
+        await unlink(filePath);
       } catch (error) {
         console.error(error);
-        throw new Error(error);
       }
     }
   }
