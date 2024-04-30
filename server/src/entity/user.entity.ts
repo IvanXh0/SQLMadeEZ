@@ -12,6 +12,9 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @OneToMany(() => Creator, creator => creator.user, { nullable: true })
+  @OneToMany(() => Creator, creator => creator.user, {
+    nullable: true,
+    cascade: true,
+  })
   creators?: Creator[];
 }

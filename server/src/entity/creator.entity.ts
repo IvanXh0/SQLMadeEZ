@@ -12,6 +12,9 @@ export class Creator {
   @Column({ nullable: true })
   generated_code: string;
 
-  @ManyToOne(() => User, user => user.creators, { nullable: true })
+  @ManyToOne(() => User, user => user.creators, {
+    nullable: true,
+    onDelete: 'CASCADE',
+  })
   user?: User;
 }

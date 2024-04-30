@@ -1,7 +1,8 @@
-import { DeleteResult } from 'typeorm';
 import { AppDataSource } from '../const/dataSource';
 import { CreateUserDto } from '../dtos/create-user.dto';
 import { User } from '../entity/user.entity';
+import { unlink } from 'node:fs/promises';
+import { dbPath } from '../const/consts';
 
 export class UserService {
   private static userRepo = AppDataSource.getRepository(User);
@@ -27,7 +28,16 @@ export class UserService {
     return await this.userRepo.findOneBy({ email });
   }
 
-  static async deleteUser(userId: string): Promise<DeleteResult> {
-    return await this.userRepo.delete({ userId });
+  static async deleteUser(userId: string): Promise<void> {
+    const deleteResult = await this.userRepo.delete({ userId });
+
+    if (deleteResult.affected !== 0) {
+      try {
+        await unlink(`${dbPath}/${userId}.db`);
+      } catch (error) {
+        console.error(error);
+        throw new Error(error);
+      }
+    }
   }
 }

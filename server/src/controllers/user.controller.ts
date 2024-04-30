@@ -35,11 +35,10 @@ export class UserController {
 
   static async deleteUser(req: Request, res: Response) {
     try {
-      console.log(req.params);
       const { userId } = req.params;
 
       await UserService.deleteUser(userId);
-      res.status(204).send();
+      res.sendStatus(204);
     } catch (error) {
       res.status(500).json({ msg: error.message });
     }

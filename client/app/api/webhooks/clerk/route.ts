@@ -57,12 +57,13 @@ export async function POST(req: Request) {
       const res = await axios.post("http://localhost:3000/api/user", {
         userId: id,
         name: `${attributes.first_name} ${attributes.last_name}`,
-        email: attributes.email_addresses[0].email_address,
+        email:
+          attributes.email_addresses?.[0].email_address ??
+          attributes.external_accounts?.[0].email_address,
       });
 
-      if (res.status === 200) {
-        console.log("User created");
-      }
+      if (res.status === 200) console.log("User created");
+
       break;
     }
 
