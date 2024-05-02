@@ -3,8 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "./providers";
 import { ClerkProvider } from "@clerk/nextjs";
-import { Navbar } from "@/components/navbar";
 import { cn } from "@/lib/utils";
+import { Sidebar } from "@/components/sidebar";
+import { Navbar } from "@/components/navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,8 +23,15 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={cn(inter.className, "bg-white")}>
-          <Navbar />
-          <Providers>{children}</Providers>
+          <div className="h-full relative">
+            <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:inset-y-0 z-[80] bg-gray-900">
+              <Sidebar />
+            </div>
+          </div>
+          <main className="relative md:ml-72">
+            <Navbar />
+            <Providers>{children}</Providers>
+          </main>
         </body>
       </html>
     </ClerkProvider>

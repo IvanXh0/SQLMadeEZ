@@ -9,24 +9,24 @@ export class UserService {
   private static userRepo = AppDataSource.getRepository(User);
 
   static async getAll(): Promise<User[]> {
-    return await this.userRepo.find({
+    return this.userRepo.find({
       relations: { creators: true },
     });
   }
 
   static async getAllQueriesByUser(email: string): Promise<User[]> {
-    return await this.userRepo.find({
+    return this.userRepo.find({
       where: { email },
       relations: { creators: true },
     });
   }
 
   static async saveUser(user: CreateUserDto): Promise<User> {
-    return await this.userRepo.save(user);
+    return this.userRepo.save(user);
   }
 
   static async getUserByEmail(email: string): Promise<User> {
-    return await this.userRepo.findOneBy({ email });
+    return this.userRepo.findOneBy({ email });
   }
 
   static async deleteUser(userId: string): Promise<void> {
