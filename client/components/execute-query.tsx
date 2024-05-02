@@ -99,7 +99,7 @@ export const ExecuteQuery = () => {
                   handleEditorDidMount(editor, monaco);
                   editor.addCommand(
                     monaco.KeyMod.Shift | monaco.KeyCode.Enter,
-                    () => handleSubmit(),
+                    () => handleSubmit()
                   );
                 }}
                 onChange={(value) => setFieldValue("sqlQuery", value)}
