@@ -6,6 +6,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { Sidebar } from "@/components/sidebar";
 import { Navbar } from "@/components/navbar";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,6 +32,7 @@ export default function RootLayout({
           <main className="relative md:ml-72">
             <Navbar />
             <Providers>{children}</Providers>
+            <Toaster position="top-right" />
           </main>
         </body>
       </html>

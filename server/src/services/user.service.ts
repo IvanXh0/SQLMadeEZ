@@ -14,9 +14,9 @@ export class UserService {
     });
   }
 
-  static async getAllQueriesByUser(email: string): Promise<User[]> {
+  static async getAllQueriesByUser(userId: string): Promise<User[]> {
     return this.userRepo.find({
-      where: { email },
+      where: { userId },
       relations: { creators: true },
     });
   }

@@ -22,4 +22,17 @@ export class CreatorController {
       res.status(500).json({ error: error.message });
     }
   }
+
+  static async getAllQueriesByUser(req: Request, res: Response) {
+    const { userId } = req.params;
+    try {
+      const queriesByUser = await CreatorService.getAllQueriesByUser(userId);
+
+      if (!queriesByUser.length) throw new Error('No queries found');
+
+      res.status(200).send(queriesByUser);
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  }
 }

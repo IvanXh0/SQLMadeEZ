@@ -12,9 +12,9 @@ export class UserController {
   }
 
   static async getAllQueriesByUser(req: Request, res: Response) {
-    const { email } = req.params;
+    const { userId } = req.params;
     try {
-      const queriesByUser = await UserService.getAllQueriesByUser(email);
+      const queriesByUser = await UserService.getAllQueriesByUser(userId);
 
       if (!queriesByUser.length) throw new Error('No queries found');
 

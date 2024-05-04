@@ -7,6 +7,7 @@ import { sqlFilterMiddleware } from '../middlewares/sql-filter.middleware';
 export const creatorRouter = Router();
 
 creatorRouter.get('/', CreatorController.getAll);
+creatorRouter.get('/:userId', CreatorController.getAllQueriesByUser);
 creatorRouter.post(
   '/execute-query',
   validateDto(CreateCreatorDto),

@@ -115,4 +115,15 @@ export class CreatorService {
       await queryRunner.release();
     }
   }
+
+  static async getAllQueriesByUser(userId: string): Promise<Creator[]> {
+    const user = await this.userRepo.findOneBy({ userId });
+
+    if (!user) throw new Error('User not found.');
+
+    return await this.creatorRepo.find({
+      where: { user: { userId } },
+      relations: ['user'],
+    });
+  }
 }

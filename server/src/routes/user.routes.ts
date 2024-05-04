@@ -7,7 +7,7 @@ export const userRouter = Router();
 
 userRouter.get('/', UserController.getAll);
 
-userRouter.get('/:email', UserController.getAllQueriesByUser);
+userRouter.get('/:userId', UserController.getAllQueriesByUser);
 
 userRouter.post('/', validateDto(CreateUserDto), UserController.saveUser);
 
