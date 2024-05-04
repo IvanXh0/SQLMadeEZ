@@ -30,3 +30,10 @@ export interface Creator {
   generated_code: string;
   userId: string;
 }
+
+export interface Snippets {
+  id: string;
+  name: string;
+  generated_code: string;
+  email: string;
+}

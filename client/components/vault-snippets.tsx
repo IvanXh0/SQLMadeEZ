@@ -2,41 +2,45 @@
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-// interface Creators {
-//   name: string;
-//
-// }
-// interface Snippet {
-//   creators:
+import { SnippetList } from "./snippet-list";
+import type { Snippets } from "@/utils/types";
+import { NoSnippets } from "./no-snippets";
+
 export const VaultSnippets = () => {
   const { user } = useUser();
   const userId = user?.id;
-  const { data: snippets } = useQuery({
-    queryKey: ["snippets"],
-    queryFn: () => {
-      if (!user) return [];
-      return axios
-        .get(`http://localhost:3000/api/creator/${userId}`)
-        .then((res) => res.data)
-        .catch((err) => console.log(err));
-    },
+
+  const fetchSnippets = async () => {
+    if (!userId) return [];
+    try {
+      const response = await axios.get(
+        `http://localhost:3000/api/creator/${userId}`,
+      );
+      return response.data;
+    } catch (err) {
+      return [];
+    }
+  };
+
+  const { data: snippets } = useQuery<Snippets[]>({
+    queryKey: ["snippets", userId],
+    queryFn: fetchSnippets,
+    enabled: Boolean(userId),
   });
-  console.log(snippets);
+
+  const snippetsExist = snippets && snippets.length > 0;
+
   return (
-    snippets &&
-    snippets.length > 0 &&
-    snippets.map((snippet) => (
-      <div
-        key={snippet.id}
-        className="rounded-lg bg-white p-4 shadow-md dark:bg-gray-800"
-      >
-        <h2 className="mb-2 text-lg font-semibold text-gray-900 dark:text-gray-100">
-          {snippet.name}
-        </h2>
-        <pre className="overflow-auto rounded-md bg-gray-100 p-4 font-mono text-sm text-gray-800 dark:bg-gray-700 dark:text-gray-200">
-          {snippet.generated_code}
-        </pre>
-      </div>
-    ))
+    <>
+      {!snippetsExist ? (
+        <NoSnippets />
+      ) : (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {snippets?.map((snippet) => (
+            <SnippetList key={snippet.id} snippetData={snippet} />
+          ))}
+        </div>
+      )}
+    </>
   );
 };

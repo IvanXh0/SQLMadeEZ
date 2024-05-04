@@ -103,7 +103,7 @@ export const ExecuteQuery = () => {
                 </div>
               </div>
               <Editor
-                height="40vh"
+                height="50vh"
                 defaultLanguage="sql1"
                 theme="customTheme"
                 value={values.sqlQuery}
@@ -120,7 +120,7 @@ export const ExecuteQuery = () => {
                 }}
               />
               {errors.sqlQuery && (
-                <div className="rounded-md bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900 dark:text-red-50 w-full mt-5">
+                <div className="rounded-md mt-5 bg-red-50 p-4 text-sm text-red-700 dark:bg-red-900 dark:text-red-50 w-full">
                   <div className="flex items-start gap-3">
                     <TriangleAlertIcon className="h-5 w-5 flex-shrink-0 mt-1" />
                     <div>
