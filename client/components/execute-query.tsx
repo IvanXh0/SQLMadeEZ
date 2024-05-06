@@ -14,6 +14,10 @@ import { RenderTable } from "./render-table";
 import { toast } from "sonner";
 import { TriangleAlertIcon } from "lucide-react";
 
+interface P {
+  snippetId?: string;
+}
+
 interface InitialValues {
   sqlQuery: string;
   queryName: string;
@@ -24,9 +28,12 @@ const EXECUTE_QUERY = "http://localhost:3000/api/creator/execute-query";
 const EXECUTE_AND_SAVE_QUERY =
   "http://localhost:3000/api/creator/execute-query?shouldSaveQuery";
 
-export const ExecuteQuery = () => {
+export const ExecuteQuery = ({ snippetId }: P) => {
   const { user } = useUser();
   const { handleEditorDidMount } = useEditorSetup();
+  const isEditMode = Boolean(snippetId);
+
+  console.log(isEditMode);
 
   const { data: queryResult, mutate: handleQuerySubmit } = useMutation<
     APIResponse<QueryResult>,

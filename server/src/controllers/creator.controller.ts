@@ -35,4 +35,17 @@ export class CreatorController {
       res.status(500).json({ msg: error.message });
     }
   }
+
+  static async getQueryById(req: Request, res: Response) {
+    const { queryId } = req.params;
+    try {
+      const query = await CreatorService.getQueryById(queryId);
+
+      if (!query) throw new Error('Query not found');
+
+      res.status(200).send(query);
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  }
 }

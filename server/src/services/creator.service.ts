@@ -126,4 +126,8 @@ export class CreatorService {
       relations: ['user'],
     });
   }
+
+  static async getQueryById(queryId: string): Promise<Creator> {
+    return this.creatorRepo.findOneBy({ id: queryId });
+  }
 }
