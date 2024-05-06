@@ -4,7 +4,7 @@ export interface QueryResult {
 
 export interface APIResponse<T> {
   data: T;
-  msg: string;
+  msg?: string;
   status: number;
 }
 

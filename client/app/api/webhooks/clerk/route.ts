@@ -1,7 +1,7 @@
 import { Webhook } from "svix";
 import { headers } from "next/headers";
 import { UserJSON, WebhookEvent } from "@clerk/nextjs/server";
-import axios from "axios";
+import api from "@/utils/api";
 
 export async function POST(req: Request) {
   const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     case "user.created": {
       const attributes = attr as UserJSON;
 
-      const res = await axios.post("http://localhost:3000/api/user", {
+      const res = await api.post("user", {
         userId: id,
         name: `${attributes.first_name} ${attributes.last_name}`,
         email:
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
     }
 
     case "user.deleted": {
-      const res = await axios.delete(`http://localhost:3000/api/user/${id}`);
+      const res = await api.delete(`http://localhost:3000/api/user/${id}`);
 
       if (res.status === 204) console.log("User deleted");
 

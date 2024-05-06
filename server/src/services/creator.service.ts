@@ -128,6 +128,6 @@ export class CreatorService {
   }
 
   static async getQueryById(queryId: string): Promise<Creator> {
-    return this.creatorRepo.findOneBy({ id: queryId });
+    return this.creatorRepo.findOneByOrFail({ id: queryId });
   }
 }

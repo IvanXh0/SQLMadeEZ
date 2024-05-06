@@ -1,10 +1,10 @@
 "use client";
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
 import { SnippetList } from "./snippet-list";
 import type { Snippets } from "@/utils/types";
 import { NoSnippets } from "./no-snippets";
+import api from "@/utils/api";
 
 export const VaultSnippets = () => {
   const { user } = useUser();
@@ -13,9 +13,7 @@ export const VaultSnippets = () => {
   const fetchSnippets = async () => {
     if (!userId) return [];
     try {
-      const response = await axios.get(
-        `http://localhost:3000/api/creator/${userId}`,
-      );
+      const response = await api.get<Snippets[]>(`creator/${userId}`);
       return response.data;
     } catch (err) {
       return [];

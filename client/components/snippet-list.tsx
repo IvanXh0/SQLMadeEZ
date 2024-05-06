@@ -25,7 +25,7 @@ export const SnippetList = ({ snippetData }: P) => {
           >
             {snippetData.name}
           </h2>
-          <Link href={`/generate/id=${snippetData.id}`}>
+          <Link href={`/generate/${snippetData.id}`}>
             <FolderOpenIcon className="hover:cursor-pointer" />
           </Link>
         </div>

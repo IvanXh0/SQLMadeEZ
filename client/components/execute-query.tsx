@@ -1,6 +1,5 @@
 "use client";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Formik, Form } from "formik";
 import { useUser } from "@clerk/nextjs";
 import Editor from "@monaco-editor/react";
@@ -8,11 +7,13 @@ import { useEditorSetup } from "@/hooks/useEditorSetup";
 import { sqlQueryValidationSchema } from "@/utils/validators";
 import { Input } from "./ui/input";
 import { Checkbox } from "./ui/checkbox";
-import { APIResponse, QueryError, QueryResult } from "@/utils/types";
+import { APIResponse, Creator, QueryError, QueryResult } from "@/utils/types";
 import { Button } from "./ui/button";
 import { RenderTable } from "./render-table";
 import { toast } from "sonner";
 import { TriangleAlertIcon } from "lucide-react";
+import { validateQueryWithSchema } from "@/utils/validator-helpers";
+import api from "@/utils/api";
 
 interface P {
   snippetId?: string;
@@ -24,24 +25,31 @@ interface InitialValues {
   saveQuery: boolean;
 }
 
-const EXECUTE_QUERY = "http://localhost:3000/api/creator/execute-query";
-const EXECUTE_AND_SAVE_QUERY =
-  "http://localhost:3000/api/creator/execute-query?shouldSaveQuery";
+const EXECUTE_QUERY = "creator/execute-query";
+const EXECUTE_AND_SAVE_QUERY = "creator/execute-query?shouldSaveQuery";
+const GET_QUERY = (snippetId: string) => `creator/${snippetId}/query`;
 
 export const ExecuteQuery = ({ snippetId }: P) => {
   const { user } = useUser();
   const { handleEditorDidMount } = useEditorSetup();
   const isEditMode = Boolean(snippetId);
 
-  console.log(isEditMode);
-
+  const { data: queryData } = useQuery({
+    queryKey: ["query", snippetId],
+    queryFn: async () => {
+      if (!snippetId) return;
+      const { data } = await api.get<Creator>(GET_QUERY(snippetId));
+      return data;
+    },
+    enabled: isEditMode,
+  });
   const { data: queryResult, mutate: handleQuerySubmit } = useMutation<
     APIResponse<QueryResult>,
     QueryError,
     { sql: string; name: string; saveQuery: boolean }
   >({
     mutationFn: ({ sql, name, saveQuery }) =>
-      axios.post(saveQuery ? EXECUTE_AND_SAVE_QUERY : EXECUTE_QUERY, {
+      api.post(saveQuery ? EXECUTE_AND_SAVE_QUERY : EXECUTE_QUERY, {
         sql,
         name: name ? name : "unnamed",
         email: user?.emailAddresses[0].emailAddress,
@@ -55,8 +63,8 @@ export const ExecuteQuery = ({ snippetId }: P) => {
   });
 
   const initialValues: InitialValues = {
-    sqlQuery: "",
-    queryName: "",
+    sqlQuery: queryData?.generated_code ?? "",
+    queryName: queryData?.name ?? "",
     saveQuery: false,
   };
 
@@ -65,6 +73,9 @@ export const ExecuteQuery = ({ snippetId }: P) => {
       <Formik
         initialValues={initialValues}
         validationSchema={sqlQueryValidationSchema}
+        validate={(values) =>
+          validateQueryWithSchema(sqlQueryValidationSchema, values)
+        }
         onSubmit={({ sqlQuery, queryName, saveQuery }, { setSubmitting }) => {
           if (!sqlQuery) {
             toast.error("SQL Query is required");
@@ -133,13 +144,19 @@ export const ExecuteQuery = ({ snippetId }: P) => {
                     <div>
                       <h4 className="font-medium">Validation Errors</h4>
                       <ul className="mt-2 space-y-1 list-disc pl-5">
-                        {errors.sqlQuery && <li>{errors.sqlQuery}</li>}
+                        {Object.entries(errors.sqlQuery).map(([key, value]) => (
+                          <li key={key}>{value}</li>
+                        ))}
                       </ul>
                     </div>
                   </div>
                 </div>
               )}
-              <Button type="submit" disabled={isSubmitting} className="w-full">
+              <Button
+                type="submit"
+                disabled={isSubmitting || Boolean(errors.sqlQuery)}
+                className="w-full"
+              >
                 Execute
               </Button>
               {queryResult && queryResult.data && queryResult.data.result && (

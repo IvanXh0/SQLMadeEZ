@@ -8,6 +8,7 @@ export const creatorRouter = Router();
 
 creatorRouter.get('/', CreatorController.getAll);
 creatorRouter.get('/:userId', CreatorController.getAllQueriesByUser);
+creatorRouter.get('/:queryId/query', CreatorController.getQueryById);
 creatorRouter.post(
   '/execute-query',
   validateDto(CreateCreatorDto),
