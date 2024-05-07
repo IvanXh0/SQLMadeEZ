@@ -14,8 +14,8 @@ export const validateQueryWithSchema = <T>(
   } catch (err) {
     return (err as ValidationError).inner.reduce(
       (acc: ValidationErrors, curr) => {
-        if (!acc[curr.path!]) {
-          acc[curr.path!] = [];
+        if (!acc[curr.path as keyof ValidationErrors]) {
+          acc[curr.path as keyof ValidationErrors] = [];
         }
         acc[curr.path as keyof ValidationErrors].push(curr.message);
         return acc;

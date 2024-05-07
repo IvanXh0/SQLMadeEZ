@@ -123,7 +123,6 @@ export const ExecuteQuery = ({ snippetId }: P) => {
               <Editor
                 height="50vh"
                 defaultLanguage="sql1"
-                theme="customTheme"
                 value={values.sqlQuery}
                 onMount={(editor, monaco) => {
                   handleEditorDidMount(editor, monaco);
@@ -135,6 +134,7 @@ export const ExecuteQuery = ({ snippetId }: P) => {
                 onChange={(value) => setFieldValue("sqlQuery", value)}
                 options={{
                   minimap: { enabled: false },
+                  theme: "customTheme",
                 }}
               />
               {errors.sqlQuery && (

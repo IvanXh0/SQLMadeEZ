@@ -67,7 +67,7 @@ export async function POST(req: Request) {
     }
 
     case "user.deleted": {
-      const res = await api.delete(`http://localhost:3000/api/user/${id}`);
+      const res = await api.delete(`user/${id}`);
 
       if (res.status === 204) console.log("User deleted");
 
