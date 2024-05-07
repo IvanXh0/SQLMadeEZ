@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { TriangleAlertIcon } from "lucide-react";
 import { validateQueryWithSchema } from "@/utils/validator-helpers";
 import api from "@/utils/api";
+import { LoadingSpinner } from "./loading-spinner";
 
 interface P {
   snippetId?: string;
@@ -34,7 +35,7 @@ export const ExecuteQuery = ({ snippetId }: P) => {
   const { handleEditorDidMount } = useEditorSetup();
   const isEditMode = Boolean(snippetId);
 
-  const { data: queryData } = useQuery({
+  const { data: queryData, isLoading } = useQuery({
     queryKey: ["query", snippetId],
     queryFn: async () => {
       if (!snippetId) return;
@@ -67,6 +68,8 @@ export const ExecuteQuery = ({ snippetId }: P) => {
     queryName: queryData?.name ?? "",
     saveQuery: false,
   };
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <main className="flex flex-col items-center min-h-screen p-24 bg-white">
