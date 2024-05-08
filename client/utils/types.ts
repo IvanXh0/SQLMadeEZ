@@ -37,3 +37,16 @@ export interface Snippets {
   generated_code: string;
   email: string;
 }
+
+export interface TableColumn {
+  name: string;
+  type: string;
+  isNullable: boolean;
+  isPrimary: boolean;
+  isUnique: boolean;
+}
+
+export interface RenderExistingTablesProps {
+  name: string;
+  columns: TableColumn[];
+}

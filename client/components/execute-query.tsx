@@ -15,6 +15,8 @@ import { TriangleAlertIcon } from "lucide-react";
 import { validateQueryWithSchema } from "@/utils/validator-helpers";
 import api from "@/utils/api";
 import { LoadingSpinner } from "./loading-spinner";
+import { useBoolean } from "usehooks-ts";
+import { ExistingTablesModal } from "./existing-tables-modal";
 
 interface P {
   snippetId?: string;
@@ -34,6 +36,8 @@ export const ExecuteQuery = ({ snippetId }: P) => {
   const { user } = useUser();
   const { handleEditorDidMount } = useEditorSetup();
   const isEditMode = Boolean(snippetId);
+  const { value: isExistingTableModalOpen, toggle: toggleExistingTableModal } =
+    useBoolean(false);
 
   const { data: queryData, isLoading } = useQuery({
     queryKey: ["query", snippetId],
@@ -155,16 +159,29 @@ export const ExecuteQuery = ({ snippetId }: P) => {
                   </div>
                 </div>
               )}
-              <Button
-                type="submit"
-                disabled={isSubmitting || Boolean(errors.sqlQuery)}
-                className="w-full"
-              >
-                Execute
-              </Button>
+              <div className="flex flex-col gap-4 w-full py-2 md:flex-row">
+                <Button
+                  type="submit"
+                  disabled={isSubmitting || Boolean(errors.sqlQuery)}
+                  className="w-full"
+                >
+                  Execute
+                </Button>
+                <Button
+                  type="button"
+                  className="w-full"
+                  onClick={toggleExistingTableModal}
+                >
+                  Show Existing Tables
+                </Button>
+              </div>
               {queryResult && queryResult.data && queryResult.data.result && (
                 <RenderTable renderData={queryResult.data.result} />
               )}
+              <ExistingTablesModal
+                toggleExistingTableModal={toggleExistingTableModal}
+                isExistingTableModalOpen={isExistingTableModalOpen}
+              />
             </div>
           </Form>
         )}

@@ -1,7 +1,18 @@
 import { getQueryRunner } from '../utils/getQueryRunner';
 
+export interface TableWithColumns {
+  name: string;
+  columns: {
+    name: string;
+    type: string;
+    isNullable: boolean;
+    isPrimary: boolean;
+    isUnique: boolean;
+  }[];
+}
+
 export class TableService {
-  static async getTables(userId: string) {
+  static async getTables(userId: string): Promise<TableWithColumns[]> {
     const queryRunner = await getQueryRunner(userId);
     await queryRunner.connect();
 
