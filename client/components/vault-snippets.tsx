@@ -5,29 +5,29 @@ import { SnippetList } from "./snippet-list";
 import type { Snippets } from "@/utils/types";
 import { NoSnippets } from "./no-snippets";
 import api from "@/utils/api";
+import { LoadingSpinner } from "./loading-spinner";
 
 export const VaultSnippets = () => {
   const { user } = useUser();
   const userId = user?.id;
 
-  const fetchSnippets = async () => {
-    if (!userId) return [];
-    try {
-      const response = await api.get<Snippets[]>(`creator/${userId}`);
-      return response.data;
-    } catch (err) {
-      return [];
-    }
-  };
-
-  const { data: snippets } = useQuery<Snippets[]>({
+  const { data: snippets, isPending } = useQuery<Snippets[]>({
     queryKey: ["snippets", userId],
-    queryFn: fetchSnippets,
+    queryFn: async () => {
+      if (!userId) return [];
+      try {
+        const response = await api.get<Snippets[]>(`creator/${userId}`);
+        return response.data;
+      } catch (err) {
+        return [];
+      }
+    },
     enabled: Boolean(userId),
   });
 
   const snippetsExist = snippets && snippets.length > 0;
 
+  if (isPending) return <LoadingSpinner />;
   return (
     <>
       {!snippetsExist ? (

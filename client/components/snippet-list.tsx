@@ -2,7 +2,7 @@ import { Snippets } from "@/utils/types";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { SnippetDialog } from "./snippet-dialog";
 import { useBoolean } from "usehooks-ts";
-import { FolderOpenIcon } from "lucide-react";
+import { SquareArrowOutUpRightIcon } from "lucide-react";
 import Link from "next/link";
 
 interface P {
@@ -26,7 +26,10 @@ export const SnippetList = ({ snippetData }: P) => {
             {snippetData.name}
           </h2>
           <Link href={`/generate/${snippetData.id}`}>
-            <FolderOpenIcon className="hover:cursor-pointer" />
+            <SquareArrowOutUpRightIcon
+              size={20}
+              className="hover:cursor-pointer"
+            />
           </Link>
         </div>
         <SyntaxHighlighter
