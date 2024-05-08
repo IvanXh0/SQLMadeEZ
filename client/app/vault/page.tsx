@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function Vault() {
   return (
-    <main className="flex min-h-screen flex-col py-8 md:py-10 lg:py-12">
+    <main className="flex flex-col py-8 md:py-10 lg:py-12">
       <div className="container mx-auto max-w-6xl px-4 md:px-6">
         <div className="mb-6 md:mb-8 lg:mb-10">
           <div className="flex justify-between">

@@ -14,6 +14,7 @@ export interface QueryResult {
 
 export interface APIErrorResponse {
   error: string;
+  msg?: string;
 }
 
 export interface QueryError {

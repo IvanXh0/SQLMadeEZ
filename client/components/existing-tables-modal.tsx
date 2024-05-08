@@ -4,11 +4,13 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 interface P {
   toggleExistingTableModal: () => void;
   isExistingTableModalOpen: boolean;
+  handleSetSQLQuery: (value: string) => void;
 }
 
 export const ExistingTablesModal = ({
   toggleExistingTableModal,
   isExistingTableModalOpen,
+  handleSetSQLQuery,
 }: P) => {
   return (
     <Sheet
@@ -21,6 +23,8 @@ export const ExistingTablesModal = ({
         </SheetHeader>
         <ExistingTablesView
           isExistingTableModalOpen={isExistingTableModalOpen}
+          handleSetSQLQuery={handleSetSQLQuery}
+          toggleExistingTableModal={toggleExistingTableModal}
         />
       </SheetContent>
     </Sheet>

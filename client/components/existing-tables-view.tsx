@@ -10,15 +10,37 @@ import {
 } from "./ui/table";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "@clerk/nextjs";
-import { RenderExistingTablesProps } from "@/utils/types";
+import { QueryError, RenderExistingTablesProps } from "@/utils/types";
+import { LoadingSpinner } from "./loading-spinner";
+import { NoTablesFound } from "./no-tables-found";
+import { Button } from "./ui/button";
+import { EditIcon, TrashIcon, ZoomInIcon } from "lucide-react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./ui/accordion";
+
+type ActionClick = "view" | "edit" | "delete";
 
 interface P {
   isExistingTableModalOpen: boolean;
+  handleSetSQLQuery: (value: string) => void;
+  toggleExistingTableModal: () => void;
 }
 
-export const ExistingTablesView = ({ isExistingTableModalOpen }: P) => {
+export const ExistingTablesView = ({
+  isExistingTableModalOpen,
+  handleSetSQLQuery,
+  toggleExistingTableModal,
+}: P) => {
   const { user } = useUser();
-  const { data: existingTables } = useQuery({
+  const {
+    data: existingTables,
+    error,
+    isLoading,
+  } = useQuery<RenderExistingTablesProps[], QueryError>({
     queryKey: ["tables", user?.id, isExistingTableModalOpen],
     queryFn: async () => {
       if (!user?.id) return [];
@@ -27,17 +49,71 @@ export const ExistingTablesView = ({ isExistingTableModalOpen }: P) => {
       );
       return data;
     },
+    retry: 1,
     enabled: Boolean(user) && isExistingTableModalOpen,
   });
 
-  if (!existingTables) return <div>Empty</div>;
+  if (isLoading) return <LoadingSpinner />;
+
+  if (!existingTables) return <NoTablesFound />;
+
+  if (error)
+    return (
+      <p className="py-3 space-y-5 text-semibold text-lg">
+        {error.response?.data?.msg}
+      </p>
+    );
+
+  const handleButtonClick = (type: ActionClick, tableName: string) => {
+    if (type === "view") {
+      handleSetSQLQuery(`SELECT * FROM ${tableName}`);
+      toggleExistingTableModal();
+    }
+
+    if (type === "edit") {
+      handleSetSQLQuery(`ALTER TABLE ${tableName}`);
+      toggleExistingTableModal();
+    }
+
+    if (type === "delete") {
+      handleSetSQLQuery(`DROP TABLE ${tableName}`);
+      toggleExistingTableModal();
+    }
+  };
 
   return (
-    <div className="py-3">
-      {existingTables?.map((table) => {
-        return (
-          <div key={table.name} className="mb-8">
-            <h3 className="text-xl font-bold mb-4">{table.name}</h3>
+    <Accordion type="single" collapsible className="py-3">
+      {existingTables.map((table) => (
+        <AccordionItem key={table.name} value={table.name}>
+          <div className="flex justify-between items-center mb-4">
+            <AccordionTrigger className="text-xl font-bold">
+              {table.name}
+            </AccordionTrigger>
+            <div className="flex space-x-2">
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => handleButtonClick("view", table.name)}
+              >
+                <ZoomInIcon size={16} className="mr-2" /> View
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => handleButtonClick("edit", table.name)}
+              >
+                <EditIcon size={16} className="mr-2" /> Edit
+              </Button>
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => handleButtonClick("delete", table.name)}
+              >
+                <TrashIcon size={16} className="mr-2" /> Delete
+              </Button>
+            </div>
+          </div>
+          <AccordionContent>
             <Table className="w-full">
               <TableHeader>
                 <TableRow>
@@ -60,9 +136,9 @@ export const ExistingTablesView = ({ isExistingTableModalOpen }: P) => {
                 ))}
               </TableBody>
             </Table>
-          </div>
-        );
-      })}
-    </div>
+          </AccordionContent>
+        </AccordionItem>
+      ))}
+    </Accordion>
   );
 };
