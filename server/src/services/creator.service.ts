@@ -24,10 +24,13 @@ export class CreatorService {
 
   private static async saveQuery(
     creatorObject: CreateCreatorDto,
+    userEmail: string,
   ): Promise<Creator> {
     const { sql, name, email } = creatorObject;
 
-    const allQueries = await this.creatorRepo.find({});
+    const allQueries = await this.creatorRepo.find({
+      where: { user: { email: userEmail } },
+    });
 
     if (allQueries.length > 0) {
       const nameExists = allQueries.some(
@@ -97,7 +100,8 @@ export class CreatorService {
     await queryRunner.startTransaction();
 
     try {
-      if (shouldSaveQuery) await this.saveQuery({ sql, name, email });
+      if (shouldSaveQuery)
+        await this.saveQuery({ sql, name, email }, user.email);
 
       const commandType = sql.trim().split(' ')[0].toLowerCase();
       const processSql = sqlCommandHandlers[commandType] ?? (sql => sql);
