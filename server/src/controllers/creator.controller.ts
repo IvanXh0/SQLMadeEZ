@@ -28,8 +28,6 @@ export class CreatorController {
     try {
       const queriesByUser = await CreatorService.getAllQueriesByUser(userId);
 
-      if (!queriesByUser.length) throw new Error('No queries found');
-
       res.status(200).send(queriesByUser);
     } catch (error) {
       res.status(500).json({ msg: error.message });

@@ -75,6 +75,13 @@ export const ExecuteQuery = ({ snippetId }: P) => {
 
   if (isLoading) return <LoadingSpinner />;
 
+  if (!queryData)
+    return (
+      <div className="text-center h-screen text-xl font-semibold flex items-center justify-center">
+        Query not found
+      </div>
+    );
+
   return (
     <main className="flex flex-col items-center p-24 bg-white">
       <Formik

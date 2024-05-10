@@ -30,7 +30,9 @@ export const DeleteSnippetDialog = ({
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction onClick={deleteSnippet}>Continue</AlertDialogAction>
+        <AlertDialogAction className="bg-red-700" onClick={deleteSnippet}>
+          Continue
+        </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>
   </AlertDialog>

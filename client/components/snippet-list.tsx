@@ -37,6 +37,9 @@ export const SnippetList = ({ snippetData, userId }: P) => {
         return oldData.filter((snippet) => snippet.id !== snippetData.id);
       });
     },
+    onError: () => {
+      toast.error("Failed to delete snippet");
+    },
   });
   return (
     <>
