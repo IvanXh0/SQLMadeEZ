@@ -2,16 +2,42 @@ import { Snippets } from "@/utils/types";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { SnippetDialog } from "./snippet-dialog";
 import { useBoolean } from "usehooks-ts";
-import { SquareArrowOutUpRightIcon } from "lucide-react";
+import { SquareArrowOutUpRightIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
+import { Button } from "./ui/button";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import api from "@/utils/api";
+import { toast } from "sonner";
+import { DeleteSnippetDialog } from "./delete-snippet-dialog";
 
 interface P {
   snippetData: Snippets;
+  userId: string;
 }
 
-export const SnippetList = ({ snippetData }: P) => {
+export const SnippetList = ({ snippetData, userId }: P) => {
+  const queryClient = useQueryClient();
+
+  const { value: isDeleteDialogOpen, toggle: toggleDeleteDialog } =
+    useBoolean(false);
+
   const { value: isSnippetDialogOpen, toggle: toggleSnippetDialog } =
     useBoolean(false);
+
+  const { mutate: deleteSnippet } = useMutation({
+    mutationFn: async (snippetId: string) => {
+      await api.delete(`creator/${snippetId}`);
+    },
+    onSuccess: () => {
+      toast.success("Snippet deleted successfully");
+
+      queryClient.setQueryData(["snippets", userId], (oldData: Snippets[]) => {
+        if (!oldData) return;
+
+        return oldData.filter((snippet) => snippet.id !== snippetData.id);
+      });
+    },
+  });
   return (
     <>
       <div
@@ -25,12 +51,19 @@ export const SnippetList = ({ snippetData }: P) => {
           >
             {snippetData.name}
           </h2>
-          <Link href={`/generate/${snippetData.id}`}>
-            <SquareArrowOutUpRightIcon
-              size={20}
-              className="hover:cursor-pointer"
-            />
-          </Link>
+          <div>
+            <Button size="icon" variant="ghost">
+              <Link href={`/generate/${snippetData.id}`}>
+                <SquareArrowOutUpRightIcon
+                  size={20}
+                  className="hover:cursor-pointer"
+                />
+              </Link>
+            </Button>
+            <Button size="icon" variant="ghost" onClick={toggleDeleteDialog}>
+              <TrashIcon size={20} className="text-red-700" />
+            </Button>
+          </div>
         </div>
         <SyntaxHighlighter
           language="sql"
@@ -45,6 +78,11 @@ export const SnippetList = ({ snippetData }: P) => {
         snippetData={snippetData}
         isOpen={isSnippetDialogOpen}
         toggleDialog={toggleSnippetDialog}
+      />
+      <DeleteSnippetDialog
+        isDialogOpen={isDeleteDialogOpen}
+        toggleDialog={toggleDeleteDialog}
+        deleteSnippet={() => deleteSnippet(snippetData.id)}
       />
     </>
   );

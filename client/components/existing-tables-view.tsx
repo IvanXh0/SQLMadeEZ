@@ -1,4 +1,3 @@
-"use client";
 import api from "@/utils/api";
 import {
   Table,
@@ -64,7 +63,7 @@ export const ExistingTablesView = ({
       </p>
     );
 
-  const handleButtonClick = (type: ActionClick, tableName: string) => {
+  const handleActionButtonClick = (type: ActionClick, tableName: string) => {
     if (type === "view") {
       handleSetSQLQuery(`SELECT * FROM ${tableName}`);
       toggleExistingTableModal();
@@ -86,30 +85,33 @@ export const ExistingTablesView = ({
       {existingTables.map((table) => (
         <AccordionItem key={table.name} value={table.name}>
           <div className="flex justify-between items-center mb-4">
-            <AccordionTrigger className="text-xl font-bold">
+            <AccordionTrigger className="text-md md:text-lg font-bold">
               {table.name}
             </AccordionTrigger>
             <div className="flex space-x-2">
               <Button
                 variant="default"
-                size="sm"
-                onClick={() => handleButtonClick("view", table.name)}
+                size={window.innerWidth < 768 ? "icon" : "sm"}
+                onClick={() => handleActionButtonClick("view", table.name)}
               >
-                <ZoomInIcon size={16} className="mr-2" /> View
+                <ZoomInIcon size={16} className="mr-2" />
+                <span className="hidden md:block">View</span>
               </Button>
               <Button
                 variant="secondary"
-                size="sm"
-                onClick={() => handleButtonClick("edit", table.name)}
+                size={window.innerWidth < 768 ? "icon" : "sm"}
+                onClick={() => handleActionButtonClick("edit", table.name)}
               >
-                <EditIcon size={16} className="mr-2" /> Edit
+                <EditIcon size={16} className="mr-2" />
+                <span className="hidden md:block">Edit</span>
               </Button>
               <Button
                 variant="destructive"
-                size="sm"
-                onClick={() => handleButtonClick("delete", table.name)}
+                size={window.innerWidth < 768 ? "icon" : "sm"}
+                onClick={() => handleActionButtonClick("delete", table.name)}
               >
-                <TrashIcon size={16} className="mr-2" /> Delete
+                <TrashIcon size={16} className="mr-2" />
+                <span className="hidden md:block">Delete</span>
               </Button>
             </div>
           </div>
