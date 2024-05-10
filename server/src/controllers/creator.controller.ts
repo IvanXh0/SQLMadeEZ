@@ -48,4 +48,14 @@ export class CreatorController {
       res.status(500).json({ msg: error.message });
     }
   }
+
+  static async deleteQuery(req: Request, res: Response) {
+    const { queryId } = req.params;
+    try {
+      await CreatorService.deleteQuery(queryId);
+      res.sendStatus(204);
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  }
 }

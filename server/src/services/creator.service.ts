@@ -85,7 +85,7 @@ export class CreatorService {
     creator: CreateCreatorDto,
     shouldSaveQuery: boolean,
   ) {
-    const { sql, name, email } = creator;
+    const { sql, email } = creator;
     const user = await this.userRepo.findOneBy({ email });
 
     if (!user) throw new Error('User not found.');
@@ -100,8 +100,7 @@ export class CreatorService {
     await queryRunner.startTransaction();
 
     try {
-      if (shouldSaveQuery)
-        await this.saveQuery({ sql, name, email }, user.email);
+      if (shouldSaveQuery) await this.saveQuery(creator, user.email);
 
       const commandType = sql.trim().split(' ')[0].toLowerCase();
       const processSql = sqlCommandHandlers[commandType] ?? (sql => sql);
@@ -133,5 +132,9 @@ export class CreatorService {
 
   static async getQueryById(queryId: string): Promise<Creator> {
     return this.creatorRepo.findOneByOrFail({ id: queryId });
+  }
+
+  static async deleteQuery(queryId: string): Promise<void> {
+    await this.creatorRepo.delete({ id: queryId });
   }
 }

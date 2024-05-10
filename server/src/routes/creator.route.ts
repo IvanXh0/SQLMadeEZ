@@ -15,3 +15,4 @@ creatorRouter.post(
   sqlFilterMiddleware,
   CreatorController.executeQuery,
 );
+creatorRouter.delete('/:queryId', CreatorController.deleteQuery);
