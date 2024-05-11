@@ -1,4 +1,12 @@
-import api from "@/utils/api";
+import { LoadingSpinner } from "@/components/loading-spinner";
+import { NoTablesFound } from "@/components/no-tables-found";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -6,20 +14,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
-import { useQuery } from "@tanstack/react-query";
-import { useUser } from "@clerk/nextjs";
+} from "@/components/ui/table";
+import api from "@/utils/api";
 import { QueryError, RenderExistingTablesProps } from "@/utils/types";
-import { LoadingSpinner } from "./loading-spinner";
-import { NoTablesFound } from "./no-tables-found";
-import { Button } from "./ui/button";
+import { useUser } from "@clerk/nextjs";
+import { useQuery } from "@tanstack/react-query";
 import { EditIcon, TrashIcon, ZoomInIcon } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./ui/accordion";
 
 type ActionClick = "view" | "edit" | "delete";
 

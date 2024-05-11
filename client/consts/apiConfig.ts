@@ -3,6 +3,7 @@ const API_BASE_URLS: Record<string, string> = {
   production: "tba",
 };
 
-const ENV = process.env.NODE_ENV;
+const { NODE_ENV } = process.env;
 
-export const API_BASE_URL = API_BASE_URLS[ENV] ?? API_BASE_URLS.development;
+export const API_BASE_URL =
+  API_BASE_URLS[NODE_ENV] ?? API_BASE_URLS.development;

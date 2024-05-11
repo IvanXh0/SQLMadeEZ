@@ -1,11 +1,11 @@
-import { Snippets } from "@/utils/types";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "./ui/dialog";
+} from "@/components/ui/dialog";
+import { Snippets } from "@/utils/types";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 
 interface P {

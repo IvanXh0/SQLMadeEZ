@@ -1,4 +1,3 @@
-import { Creator } from "@/utils/types";
 import {
   Table,
   TableBody,
@@ -6,7 +5,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
+} from "@/components/ui/table";
+import { Creator } from "@/utils/types";
 
 interface P {
   renderData: Creator[];

@@ -1,13 +1,13 @@
 import {
-  AlertDialogHeader,
-  AlertDialogFooter,
   AlertDialog,
-  AlertDialogContent,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogCancel,
   AlertDialogAction,
-} from "./ui/alert-dialog";
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 interface P {
   toggleDialog?: () => void;

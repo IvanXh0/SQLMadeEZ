@@ -1,8 +1,8 @@
-import { Menu } from "lucide-react";
-import { Button } from "./ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { Sidebar } from "./sidebar";
+import { Sidebar } from "@/components/sidebar";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useSidebarStore } from "@/hooks/sidebarStore";
+import { Menu } from "lucide-react";
 
 export const MobileSidebar = () => {
   const { isOpen, openSidebar, closeSidebar } = useSidebarStore();

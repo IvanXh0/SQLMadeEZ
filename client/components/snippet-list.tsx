@@ -1,14 +1,14 @@
+import { DeleteSnippetDialog } from "@/components/delete-snippet-dialog";
+import api from "@/utils/api";
 import { Snippets } from "@/utils/types";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { SnippetDialog } from "./snippet-dialog";
-import { useBoolean } from "usehooks-ts";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SquareArrowOutUpRightIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import api from "@/utils/api";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { toast } from "sonner";
-import { DeleteSnippetDialog } from "./delete-snippet-dialog";
+import { useBoolean } from "usehooks-ts";
+import { SnippetDialog } from "./snippet-dialog";
+import { Button } from "./ui/button";
 
 interface P {
   snippetData: Snippets;

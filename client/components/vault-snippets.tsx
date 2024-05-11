@@ -1,11 +1,11 @@
 "use client";
+import { LoadingSpinner } from "@/components/loading-spinner";
+import { NoSnippets } from "@/components/no-snippets";
+import { SnippetList } from "@/components/snippet-list";
+import api from "@/utils/api";
+import type { Snippets } from "@/utils/types";
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
-import { SnippetList } from "./snippet-list";
-import type { Snippets } from "@/utils/types";
-import { NoSnippets } from "./no-snippets";
-import api from "@/utils/api";
-import { LoadingSpinner } from "./loading-spinner";
 
 export const VaultSnippets = () => {
   const { user } = useUser();

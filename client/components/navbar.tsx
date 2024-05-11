@@ -1,7 +1,7 @@
 "use client";
 
-import { Avatar } from "./avatar";
-import { MobileSidebar } from "./mobile-sidebar";
+import { Avatar } from "@/components/avatar";
+import { MobileSidebar } from "@/components/mobile-sidebar";
 
 export const Navbar = () => {
   return (

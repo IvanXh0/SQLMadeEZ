@@ -1,22 +1,22 @@
 "use client";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { Formik, Form } from "formik";
+import { useEditorSetup } from "@/hooks/useEditorSetup";
+import api from "@/utils/api";
+import { APIResponse, Creator, QueryError, QueryResult } from "@/utils/types";
+import { validateQueryWithSchema } from "@/utils/validator-helpers";
+import { sqlQueryValidationSchema } from "@/utils/validators";
 import { useUser } from "@clerk/nextjs";
 import Editor from "@monaco-editor/react";
-import { useEditorSetup } from "@/hooks/useEditorSetup";
-import { sqlQueryValidationSchema } from "@/utils/validators";
-import { Input } from "./ui/input";
-import { Checkbox } from "./ui/checkbox";
-import { APIResponse, Creator, QueryError, QueryResult } from "@/utils/types";
-import { Button } from "./ui/button";
-import { RenderTable } from "./render-table";
-import { toast } from "sonner";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { Form, Formik } from "formik";
 import { TriangleAlertIcon } from "lucide-react";
-import { validateQueryWithSchema } from "@/utils/validator-helpers";
-import api from "@/utils/api";
-import { LoadingSpinner } from "./loading-spinner";
+import { toast } from "sonner";
 import { useBoolean } from "usehooks-ts";
 import { ExistingTablesModal } from "./existing-tables-modal";
+import { LoadingSpinner } from "@/components/loading-spinner";
+import { RenderTable } from "@/components/render-table";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 
 interface P {
   snippetId?: string;
@@ -75,7 +75,7 @@ export const ExecuteQuery = ({ snippetId }: P) => {
 
   if (isLoading) return <LoadingSpinner />;
 
-  if (!queryData)
+  if (!queryData && isEditMode)
     return (
       <div className="text-center h-screen text-xl font-semibold flex items-center justify-center">
         Query not found

@@ -1,5 +1,10 @@
-import { ExistingTablesView } from "./existing-tables-view";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
+import { ExistingTablesView } from "@/components/existing-tables-view";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 
 interface P {
   toggleExistingTableModal: () => void;
