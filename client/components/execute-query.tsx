@@ -83,7 +83,7 @@ export const ExecuteQuery = ({ snippetId }: P) => {
     );
 
   return (
-    <main className="flex flex-col items-center p-24 bg-white">
+    <main className="flex flex-col items-center py-16 px-6 xl:px-0">
       <Formik
         initialValues={initialValues}
         validationSchema={sqlQueryValidationSchema}
