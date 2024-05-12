@@ -27,6 +27,7 @@ import { TableModule } from './table/table.module';
             synchronize: true,
             logging: false,
             autoLoadEntities: true,
+            ssl: true,
           };
         } else {
           return {
