@@ -1,1 +1,1 @@
-export const DB_PATH = '../db/';
+export const DB_PATH = process.cwd() + '/db';

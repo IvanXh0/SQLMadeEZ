@@ -50,7 +50,6 @@ export class CreatorController {
     @Param('userId') userId: string,
     @Res() res: Response,
   ) {
-    console.log(userId);
     try {
       const queriesByUser =
         await this.creatorService.getAllQueriesByUser(userId);

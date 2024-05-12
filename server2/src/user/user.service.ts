@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { unlink } from 'fs/promises';
-import { DB_PATH } from '../const/consts';
 import { fileExists } from '../utils/fileExists';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/user.dto';
+import { DB_PATH } from 'src/const/consts';
 
 @Injectable()
 export class UserService {
@@ -38,6 +38,7 @@ export class UserService {
   async deleteUser(userId: string): Promise<void> {
     const deleteResult = await this.userRepo.delete({ userId });
     const filePath = `${DB_PATH}/${userId}.db`;
+    console.log(filePath);
     const fileToDelete = await fileExists(filePath);
 
     if (deleteResult.affected !== 0 && fileToDelete) {
