@@ -35,7 +35,7 @@ export const AppDataSource = new DataSource({
   // database: DB_NAME,
   synchronize: true,
   logging: false,
-  entities: ['src/entity/**/*.ts'],
+  entities: ['src/entity/**/*.entity.{js,ts}'],
 });
 
 export const dynamicDataSource = async (userId: string) => {
