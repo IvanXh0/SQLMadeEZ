@@ -16,11 +16,15 @@ import { TableModule } from './table/table.module';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
-        if (process.env.NODE_ENV === 'production') {
+        if (config.get('IS_PROD') === 'true') {
+          console.log(
+            'DB_CONNECTION_STRING',
+            config.get('DB_CONNECTION_STRING'),
+          );
           return {
             type: 'postgres',
             url: config.get('DB_CONNECTION_STRING'),
-            synchronize: false,
+            synchronize: true,
             logging: false,
             autoLoadEntities: true,
           };
