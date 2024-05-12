@@ -21,6 +21,6 @@ AppDataSource.initialize()
   })
   .catch(err => console.log(err));
 
-app.listen(PORT, HOST, () => {
+app.listen(PORT, () => {
   console.log('Server started on port 3000');
 });
