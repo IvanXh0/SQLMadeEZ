@@ -1,0 +1,7 @@
+{
+	"nodes":[
+		{"id":"5ef8e5962239c4ee","x":-700,"y":-460,"width":250,"height":50,"type":"text","text":"This is a card"},
+		{"id":"c54713f558ddab79","x":300,"y":-200,"width":250,"height":60,"type":"text","text":"This is another card"}
+	],
+	"edges":[]
+}
