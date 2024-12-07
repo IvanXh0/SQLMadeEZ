@@ -33,6 +33,7 @@ const EXECUTE_AND_SAVE_QUERY = "creator/execute-query?shouldSaveQuery";
 const GET_QUERY = (snippetId: string) => `creator/${snippetId}/query`;
 
 export const ExecuteQuery = ({ snippetId }: P) => {
+  console.log('haha')
   const { user } = useUser();
   const { handleEditorDidMount } = useEditorSetup();
   const isEditMode = Boolean(snippetId);
