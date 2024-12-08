@@ -6,7 +6,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Snippets } from "@/utils/types";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { Prism, SyntaxHighlighterProps } from "react-syntax-highlighter";
+
+const SyntaxHighlighter = Prism as unknown as React.FC<SyntaxHighlighterProps>;
 
 interface P {
   snippetData: Snippets;
