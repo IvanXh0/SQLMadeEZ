@@ -4,11 +4,13 @@ import { Snippets } from "@/utils/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SquareArrowOutUpRightIcon, TrashIcon } from "lucide-react";
 import Link from "next/link";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { toast } from "sonner";
 import { useBoolean } from "usehooks-ts";
 import { SnippetDialog } from "./snippet-dialog";
 import { Button } from "./ui/button";
+import { Prism, SyntaxHighlighterProps } from "react-syntax-highlighter";
+
+const SyntaxHighlighter = Prism as any as React.FC<SyntaxHighlighterProps>;
 
 interface P {
   snippetData: Snippets;
