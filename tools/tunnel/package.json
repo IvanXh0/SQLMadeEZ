@@ -1,0 +1,15 @@
+{
+  "name": "tunnel",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "node tunnel.js"
+  },
+  "dependencies": {
+    "localtunnel": "^2.0.2"
+  },
+  "devDependencies": {
+    "@types/localtunnel": "latest"
+  }
+}
