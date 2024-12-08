@@ -50,6 +50,8 @@ export async function POST(req: Request) {
       userEmail: string;
     };
 
+    console.log("Checkout request:", { userId, userEmail });
+
     const checkout = await createCheckout(
       SUBSCRIPTION_PLAN.storeId,
       parseInt(SUBSCRIPTION_PLAN.variantId),

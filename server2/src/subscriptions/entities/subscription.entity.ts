@@ -15,9 +15,6 @@ export class Subscription {
   id: string;
 
   @Column()
-  lemonSqueezyId: string;
-
-  @Column()
   userId: string;
 
   @ManyToOne(() => User, (user) => user.subscriptions)
@@ -28,19 +25,13 @@ export class Subscription {
   status: 'active' | 'cancelled' | 'expired' | 'paused';
 
   @Column()
-  planName: string;
-
-  @Column({ type: 'decimal', precision: 10, scale: 2 })
-  price: number;
-
-  @Column()
-  currency: string;
-
-  @Column()
-  billingFrequency: 'monthly' | 'yearly';
+  planId: string;
 
   @Column()
   currentPeriodEnd: Date;
+
+  @Column({ default: false })
+  cancelAtPeriodEnd: boolean;
 
   @CreateDateColumn()
   createdAt: Date;

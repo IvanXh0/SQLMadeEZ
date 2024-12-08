@@ -38,7 +38,7 @@ export function SubscribeButton() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: me?.id,
+          userId: me?.userId,
           userEmail: me?.email,
         }),
       });

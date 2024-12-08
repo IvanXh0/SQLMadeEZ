@@ -33,8 +33,9 @@ export interface Creator {
 }
 
 export interface Me {
-  id: string;
+  userId: string;
   email: string;
+  name: string;
 }
 
 export interface Snippets {
@@ -55,4 +56,12 @@ export interface TableColumn {
 export interface RenderExistingTablesProps {
   name: string;
   columns: TableColumn[];
+}
+
+export interface Subscription {
+  userId: string;
+  status: "active" | "cancelled" | "expired" | "paused";
+  planId: string;
+  currentPeriodEnd: Date;
+  cancelAtPeriodEnd: boolean;
 }

@@ -5,12 +5,10 @@ import { Repository } from 'typeorm';
 
 export interface CreateSubscriptionDto {
   userId: string;
-  lemonSqueezyId: string;
-  planName: string;
-  price: number;
-  currency: string;
-  billingFrequency: 'monthly' | 'yearly';
+  status: 'active' | 'cancelled' | 'expired' | 'paused';
+  planId: string;
   currentPeriodEnd: Date;
+  cancelAtPeriodEnd: boolean;
 }
 
 @Injectable()
@@ -24,8 +22,50 @@ export class SubscriptionsService {
     try {
       const subscription = this.subscriptionRepository.create({
         ...createDto,
-        status: 'active',
       });
+
+      return await this.subscriptionRepository.save(subscription);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async update(
+    email: string,
+    updateDto: Partial<Subscription>,
+  ): Promise<Subscription> {
+    try {
+      const subscription = await this.subscriptionRepository.findOneBy({
+        user: { email },
+      });
+
+      if (!subscription) {
+        throw new NotFoundException(
+          `Subscription with email ${email} not found`,
+        );
+      }
+
+      Object.assign(subscription, updateDto);
+
+      return await this.subscriptionRepository.save(subscription);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async cancel(email: string): Promise<Subscription> {
+    try {
+      const subscription = await this.subscriptionRepository.findOneBy({
+        user: { email },
+      });
+
+      if (!subscription) {
+        throw new NotFoundException(
+          `Subscription with email ${email} not found`,
+        );
+      }
+
+      subscription.status = 'cancelled';
 
       return await this.subscriptionRepository.save(subscription);
     } catch (error) {
@@ -51,20 +91,6 @@ export class SubscriptionsService {
       where: { userId },
       order: { createdAt: 'DESC' },
     });
-  }
-
-  async findByLemonSqueezyId(lemonSqueezyId: string): Promise<Subscription> {
-    const subscription = await this.subscriptionRepository.findOne({
-      where: { lemonSqueezyId },
-    });
-
-    if (!subscription) {
-      throw new NotFoundException(
-        `Subscription with LemonSqueezy ID ${lemonSqueezyId} not found`,
-      );
-    }
-
-    return subscription;
   }
 
   async getActiveSubscription(userId: string): Promise<Subscription | null> {

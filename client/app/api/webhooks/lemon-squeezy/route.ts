@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { type listAllSubscriptions } from "lemonsqueezy.ts";
 import crypto from "crypto";
+import api from "@/utils/api";
+import { Subscription } from "@/utils/types";
 
 type LemonsqueezySubscription = Awaited<
   ReturnType<typeof listAllSubscriptions>
@@ -50,60 +52,49 @@ export async function POST(request: Request) {
 
     const payload = JSON.parse(text) as Payload;
 
+    console.log(payload);
+
     const {
       meta: {
         event_name: eventName,
-        custom_data: { user_id: userId },
+        custom_data: { user_id: userId, user_email: userEmail },
       },
       data: subscription,
     } = payload;
 
     switch (eventName) {
       case "subscription_created": {
-        // const user = await db.user.findFirst({
-        //   where: { id: userId },
-        // });
-        //
-        // if (!user) {
-        //   return NextResponse.json(
-        //     { success: false, message: "User not found" },
-        //     { status: 404 },
-        //   );
-        // }
-
-        // await db.subscription.create({
-        //   data: {
-        //     id: subscription.id,
-        //     userId: user?.id,
-        //     status: subscription.attributes.status,
-        //     planId: subscription.attributes.product_id.toString(),
-        //     currentPeriodEnd: new Date(subscription.attributes.renews_at),
-        //     cancelAtPeriodEnd: false,
-        //   },
-        // });
+        await api.post("/subscriptions", <Subscription>{
+          userId: userId,
+          status: subscription.attributes.status,
+          planId: subscription.attributes.product_id.toString(),
+          currentPeriodEnd: new Date(subscription.attributes.renews_at),
+          cancelAtPeriodEnd: false,
+        });
         break;
       }
 
-      case "subscription_updated": {
-        // await db.subscription.update({
-        //   where: { id: subscription.id },
-        //   data: {
-        //     status: subscription.attributes.status,
-        //     currentPeriodEnd: new Date(subscription.attributes.renews_at),
-        //     cancelAtPeriodEnd: subscription.attributes.cancelled,
-        //   },
-        // });
-        // break;
+      case "subscription_updated":
+      case "subscription_resumed":
+      case "subscription_paused": {
+        await api.patch(`/subscriptions/${userEmail}`, {
+          status: subscription.attributes.status,
+          currentPeriodEnd: new Date(
+            subscription.attributes.renews_at ??
+              subscription.attributes.ends_at,
+          ),
+        });
+        break;
       }
-
       case "subscription_cancelled": {
-        // await db.subscription.update({
-        //   where: { id: subscription.id },
-        //   data: {
-        //     status: "cancelled",
-        //     cancelAtPeriodEnd: true,
-        //   },
-        // });
+        await api.post(`/subscriptions/${userEmail}/cancel`);
+        break;
+      }
+      case "subscription_expired": {
+        await api.patch(`/subscriptions/${userEmail}`, {
+          status: "expired",
+          currentPeriodEnd: new Date(subscription.attributes.ends_at ?? ""),
+        });
         break;
       }
     }
