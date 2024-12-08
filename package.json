@@ -5,14 +5,14 @@
   "private": true,
   "repository": "git@github.com:IvanXh0/SQLMadeEZ.git",
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "tools/*"
   ],
   "scripts": {
-    "dev": "node dev.js",
+    "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "format": "turbo run format",
-    "tunnel": "lt --port 4200 --subdomain sqlmadeez"
+    "format": "turbo run format"
   },
   "devDependencies": {
     "turbo": "latest"
