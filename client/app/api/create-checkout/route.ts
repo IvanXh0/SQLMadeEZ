@@ -4,7 +4,6 @@ import {
   createCheckout,
 } from "@lemonsqueezy/lemonsqueezy.js";
 import { SUBSCRIPTION_PLAN } from "@/consts/subscription";
-import { API_BASE_URL } from "@/consts/apiConfig";
 
 export interface LemonSqueezyCheckout {
   type: string;
@@ -50,8 +49,6 @@ export async function POST(req: Request) {
       userEmail: string;
     };
 
-    console.log("Checkout request:", { userId, userEmail });
-
     const checkout = await createCheckout(
       SUBSCRIPTION_PLAN.storeId,
       parseInt(SUBSCRIPTION_PLAN.variantId),
@@ -64,7 +61,7 @@ export async function POST(req: Request) {
           },
         },
         productOptions: {
-          redirectUrl: `${API_BASE_URL}/checkout-success`,
+          redirectUrl: `http://localhost:4200/checkout-success`,
           receiptThankYouNote: "Thanks for subscribing!",
         },
       },

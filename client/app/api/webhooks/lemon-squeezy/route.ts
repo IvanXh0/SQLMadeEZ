@@ -86,10 +86,12 @@ export async function POST(request: Request) {
         });
         break;
       }
+
       case "subscription_cancelled": {
         await api.post(`/subscriptions/${userEmail}/cancel`);
         break;
       }
+
       case "subscription_expired": {
         await api.patch(`/subscriptions/${userEmail}`, {
           status: "expired",
