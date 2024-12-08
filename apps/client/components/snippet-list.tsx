@@ -10,7 +10,7 @@ import { SnippetDialog } from "./snippet-dialog";
 import { Button } from "./ui/button";
 import { Prism, SyntaxHighlighterProps } from "react-syntax-highlighter";
 
-const SyntaxHighlighter = Prism as any as React.FC<SyntaxHighlighterProps>;
+const SyntaxHighlighter = Prism as unknown as React.FC<SyntaxHighlighterProps>;
 
 interface P {
   snippetData: Snippets;
