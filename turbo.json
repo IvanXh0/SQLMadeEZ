@@ -5,7 +5,8 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "dist/**"]
+      "outputs": [".next/**", "dist/**"],
+      "env": ["CLERK_SECRET_KEY", "WEBHOOK_SECRET"]
     },
     "dev": {
       "cache": false,
