@@ -3,10 +3,7 @@
 import { useState } from "react";
 import { SUBSCRIPTION_PLAN } from "@/consts/subscription";
 import { Button } from "@/components/ui/button";
-import { useUser } from "@clerk/nextjs";
-import { useQuery } from "@tanstack/react-query";
-import api from "@/utils/api";
-import { Me } from "@/utils/types";
+import { useUserStore } from "@/stores/user.store";
 
 interface CheckoutResponse {
   url?: string;
@@ -16,18 +13,7 @@ interface CheckoutResponse {
 export function SubscribeButton() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const { user } = useUser();
-
-  const { data: me } = useQuery({
-    queryKey: ["user", user?.primaryEmailAddress?.emailAddress],
-    queryFn: async () => {
-      const { data } = await api.get<Me>(
-        `/user/${user?.primaryEmailAddress?.emailAddress}`,
-      );
-      console.log(data);
-      return data;
-    },
-  });
+  const { me } = useUserStore();
 
   const handleSubscribe = async () => {
     try {
