@@ -22,20 +22,22 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={cn(inter.className, "bg-white")}>
-          <div className="h-full relative">
-            <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:inset-y-0 z-[80] bg-gray-900">
-              <Sidebar />
+      <Providers>
+        <html lang="en">
+          <body className={cn(inter.className, "bg-white")}>
+            <div className="h-full relative">
+              <div className="hidden h-full md:flex md:w-72 md:flex-col md:fixed md:inset-y-0 z-[80] bg-gray-900">
+                <Sidebar />
+              </div>
             </div>
-          </div>
-          <main className="relative md:ml-72">
-            <Navbar />
-            <Providers>{children}</Providers>
-            <Toaster position="top-right" />
-          </main>
-        </body>
-      </html>
+            <main className="relative md:ml-72">
+              <Navbar />
+              {children}
+              <Toaster position="top-right" />
+            </main>
+          </body>
+        </html>
+      </Providers>
     </ClerkProvider>
   );
 }

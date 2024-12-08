@@ -32,6 +32,11 @@ export interface Creator {
   userId: string;
 }
 
+export interface Me {
+  id: string;
+  email: string;
+}
+
 export interface Snippets {
   id: string;
   name: string;
