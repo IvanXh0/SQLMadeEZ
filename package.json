@@ -8,13 +8,17 @@
     "apps/*"
   ],
   "scripts": {
-    "dev": "turbo run dev",
+    "dev": "node dev.js",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "format": "turbo run format"
+    "format": "turbo run format",
+    "tunnel": "lt --port 4200 --subdomain sqlmadeez"
   },
   "devDependencies": {
     "turbo": "latest"
   },
-  "packageManager": "yarn@1.22.19"
+  "packageManager": "yarn@1.22.19",
+  "dependencies": {
+    "localtunnel": "^2.0.2"
+  }
 }
