@@ -6,6 +6,7 @@ import { CreatorModule } from './creator/creator.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TableModule } from './table/table.module';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { TableModule } from './table/table.module';
     UserModule,
     CreatorModule,
     TableModule,
+    SubscriptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

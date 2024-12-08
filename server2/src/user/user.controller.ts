@@ -25,6 +25,16 @@ export class UserController {
     }
   }
 
+  @Get(':email')
+  async getUserByEmail(@Param('email') email: string) {
+    try {
+      const user = await this.userService.getUserByEmail(email);
+      return user;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.NOT_FOUND);
+    }
+  }
+
   @Get(':userId/queries')
   async getAllQueriesByUser(@Param('userId') userId: string) {
     try {

@@ -4,6 +4,7 @@ import { HomeIcon, PenToolIcon, Vault } from "lucide-react";
 import { Montserrat } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import { SubscribeButton } from "./subscribe-button";
 
 interface P {
   closeSidebar?: () => void;
@@ -58,6 +59,7 @@ export const Sidebar = ({ closeSidebar }: P) => {
               <span className="text-white font-semibold text-md">{name}</span>
             </Link>
           ))}
+          <SubscribeButton />
         </div>
       </div>
     </div>
